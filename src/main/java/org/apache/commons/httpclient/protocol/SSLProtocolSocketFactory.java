@@ -439,13 +439,18 @@ public class SSLProtocolSocketFactory implements SecureProtocolSocketFactory {
         //
         // whereas toString() gives me this:
         // EMAILADDRESS=juliusdavies@cucbc.com        
+		//
+		// Extended to handle certificates with multipple attributes in the first AVA like:
+        // EMAILADDRESS=sg@expisoft.com+CN=jenins.expisoft.com,O=Expisoft AB,C=SE
+		// 
+
 		String subjectPrincipal = cert.getSubjectX500Principal().toString();
 		
 		return getCN(subjectPrincipal);
 
 	}
 	private static String getCN(String subjectPrincipal) {
-		StringTokenizer st = new StringTokenizer(subjectPrincipal, ",");
+		StringTokenizer st = new StringTokenizer(subjectPrincipal, ",+");
 		while(st.hasMoreTokens()) {
 			String tok = st.nextToken().trim();
 			if (tok.length() > 3) {
